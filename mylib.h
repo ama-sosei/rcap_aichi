@@ -2,6 +2,7 @@
 #include "D_I2C.h"
 #include "D_SIO.h"
 #include "D_EIO.h"
+#include "math.h"
 //#include "stdarg.h"
 
 #define MCU_2620
@@ -24,14 +25,19 @@
 #define TIM_DIR_3 8
 #define TIM_KICKER 9
 
+#define abs(n) (n < 0 ? n*-1: n)
+
+#define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
+#define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
+#define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
+
+
 #if 1 //kurage
-	#define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
-	#define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
-	#define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
+	#define CENTER_X 100
+	#define CENTER_Y 160
 #else //neko
-	#define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
-	#define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
-	#define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
+	#define CENTER_X 
+	#define CENTER_Y 
 #endif
 
 ULNG timer[TIM_NUM]; //タイマー用
@@ -49,19 +55,16 @@ int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
 }
 
 ULNG getTimer(int num) {
-	printf("get timer!!:%ld\r\n", get_timer((BYTE)0) - timer[num]);
 	return get_timer((BYTE)0) - timer[num];
 }
 
 int startTimer(int num) {
-	printf("start timer!!\r\n");
 	timer[num] = get_timer((BYTE)0);
 	return 0;
 }
 
 int setupTimer(void) {
 	int i;
-	printf("setup timer!!\r\n");
 	clr_timer((BYTE)0);
 	for (i = 0; i < sizeof(timer) / sizeof(ULNG); ++i)timer[i] = get_timer((BYTE)0);
 	return 0;
@@ -107,6 +110,14 @@ int getPixy(int num, UINT *p) {
 	return 0;
 }
 
+void pixy_normalization(UINT* p){ //正規化
+	p[1] = abs(200 - p[1]);
+}
+
+float get_angle(UINT *p){
+	double c = sqrt(pow(abs(CENTER_X+p[0]), 2) + pow(abs(CENTER_Y+p[0]), 2));
+	return acos(abs(CENTER_X / c));
+}
 
 float ConI = 0, EleD = 0; //pid用
 void dir() {
