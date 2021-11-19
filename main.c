@@ -1,10 +1,13 @@
 #include "mylib.h"
 
+#define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
+#define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
+#define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
 
 void startup(void){
 	sleep(5);
 	setupTimer();
-	gV[VAR_V] = get_bno(0);
+	initial_angle = get_bno(0);
 }
 
 int chkPixy(UINT* ball) {
@@ -26,13 +29,12 @@ int chkPixy(UINT* ball) {
 	} else if (chkNum(140, 180, x) && chkNum(110, 200, y)) {
 		return 8;
 	} else {
-		printf("%4ld, %4ld \r\n", x, y);
 		return 0;
 	}
 }
 
 void processingGoal(int angle, UINT* ball){
-	UINT y[6], b[6], goal[5];
+	UINT y[6], b[6];
 	getPixy(PIXY_GOAL_Y, y);
 	getPixy(PIXY_GOAL_B, b);
 	if (angle==1){
@@ -48,14 +50,21 @@ void processingGoal(int angle, UINT* ball){
 }
 
 void user_main(void){
+	int angle=0;UINT ball[5];
 	startup();
 	while(1){
-		if (judge_bno(0, gV[VAR_V], 20)) {
-			UINT ball[5];
-			getPixy(PIXY_BALL, ball);
-			processingGoal(chkPixy(ball), ball);
+		getPixy(PIXY_BALL, ball);
+		angle=get_angle(ball);
+		printf("%4ld\n", (long)angle);
+		if (angle<=30) {
+			set_Led(3, LED_OFF);
+			motors(30,30,30,30);
+			sleep(0.1);
+			//processingGoal(chkPixy(ball), ball);
 		}else{
-			dir();
+			//dir();
+			set_Led(3, LED_ON);
 		}
 	}
 }
+
