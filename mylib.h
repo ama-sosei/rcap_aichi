@@ -32,7 +32,7 @@
 #else //neko
 #endif
 
-volatile long initial_angle;
+volatile long initial_angle=0;
 
 int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
 	if (u < val && val < o)
