@@ -27,11 +27,12 @@
 
 #define RESET_TIME 50
 
+#define FRONT_LINE CN1//前
+#define RIGHT_LINE  CN2//右
+#define LEFT_LINE CN3//左
+#define BACK_LINE CN4//後
+
 #if 1 //kurage
-	#define FRONT_LINE //前
-	#define RIGHT_LINE  //右
-	#define LEFT_LINE //左
-	#define BACK_LINE //後
 #else //neko
 #endif
 
