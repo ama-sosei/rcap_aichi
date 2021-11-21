@@ -31,7 +31,6 @@
 #else //neko
 #endif
 
-float ConI = 0, EleD = 0; //pid用
 volatile long initial_angle;
 
 int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
@@ -61,8 +60,10 @@ void kick(void) { //燃えないように3秒以上開ける
 	}
 }
 
+float EleD = 0; 
 void dir() {
-	float Dev1, Dev2, ConP;long speed;
+	float Dev1, Dev2, ConP, EleD;
+	long speed;
 	startTimer(TIM_DIR_1);
 	Dev1 = get_bno(0); - initial_angle;
 	if (Dev1 > 180) {
