@@ -25,7 +25,7 @@
 #define TIM_DIR_3 8
 #define TIM_KICKER 9
 
-#define RE_TIME 50
+#define RESET_TIME 50
 
 
 #if 1 //kurage
@@ -35,11 +35,10 @@
 volatile long initial_angle=999;
 
 int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
-	if (u < val && val < o)
-	{
-		return 1;
+	if (u < val && val < o){
+		return TRUE;
 	} else {
-		return 0;
+		return FALSE;
 	}
 }
 
@@ -82,7 +81,7 @@ void dir() {
 	}
 	startTimer(TIM_DIR_2);
 	EleD = (Dev2 - Dev1) / (getTimer(TIM_DIR_1) - getTimer(TIM_DIR_2));
-	if (RE_TIME > getTimer(TIM_DIR_3)) {
+	if (RESET_TIME > getTimer(TIM_DIR_3)) {
 		ConI = ConI + Dev1;
 	} else {
 		ConI = 0;
