@@ -45,12 +45,6 @@ void processingGoal(int num, UINT* ball, int noback) {
 	last = y[5]>b[5] ? 'y' : 'b';
 	range = 20;
 	if (num == 1) {
-		if (chkNum(155, 160, ball[0]) && chkNum(60, 70, ball[1]) && //?{?[???E’u
-				chkNum(goal[0] - (goal[2] / 2), goal[0] + (goal[2] / 2), ball[0])) { //?S?[???E’u
-			//if (goal[4] > 450 && chkNum(155, 160, ball[0]) & chkNum(60, 70, ball[1])) {
-			printf("kick!!\r\n");
-			kick();
-		}
 		if (goal[4]>300){
 			motors(30,30,30,30);
 		}else{
