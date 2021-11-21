@@ -33,21 +33,62 @@ int chkPixy(UINT* ball) {
 	}
 }
 
-void processingGoal(int angle, UINT* ball){
-	UINT y[6], b[6];
+void processingGoal(int num, UINT* ball, int noback) {
+	UINT i, y[6], b[6], goal[5];
 	getPixy(PIXY_GOAL_Y, y);
 	getPixy(PIXY_GOAL_B, b);
-	if (angle==1){
-		motors(40, 40, 40, 40);
-	}else if(angle==3){
-		motors(-25, 25, 25, -25);
-	}else if(angle==2){
-		motors(25, -25, -25, 25);
-	}else if (angle==0){
-		brake();
+	if(y[5]){
+		for(i=0; i<5; i++)goal[i]=y[i];
+	}else{
+		for(i=0; i<5; i++)goal[i]=b[i];
 	}
-	sleep(0.1);
+	last = y[5]>b[5] ? 'y' : 'b';
+	range = 20;
+	if (num == 1) {
+		if (chkNum(155, 160, ball[0]) && chkNum(60, 70, ball[1]) && //?{?[???E’u
+				chkNum(goal[0] - (goal[2] / 2), goal[0] + (goal[2] / 2), ball[0])) { //?S?[???E’u
+			//if (goal[4] > 450 && chkNum(155, 160, ball[0]) & chkNum(60, 70, ball[1])) {
+			printf("kick!!\r\n");
+			kick();
+		}
+		if (goal[4]>300){
+			motors(30,30,30,30);
+		}else{
+			motors(40,40,40,40);
+		}
+	} else if (num == 2) {
+		if (noback) {
+			motors(35,35,35,35);
+		} else {
+			motors(35,-35,-35,35);
+		}
+	} else if (num == 3) {
+		if (noback) {
+			motors(35,35,35,35);
+		} else {
+			motors(-35,35,35,-35);
+		}
+	} else if (num == 4 || num == 5 || num == 6 || num == 7) {
+		motors(35,35,35,35);
+	} else if (num == 8) {
+		UINT y[5], b[5], l; getPixy(PIXY_GOAL_Y, y); getPixy(PIXY_GOAL_B, b);
+		if (y[4] != 0 && b[4] != 0) {
+			l = b[4] > y[4] ? b[0] : y[0];
+			if (l < 160) {
+				motors(40,-40,-40,40);
+			} else {
+				motors(-20,20,20,-20);
+			}
+			wait_ms(100);
+		}
+	} else if (num == 0) {
+		motors(999,999,999,999);
+	} else {
+		motors(999,999,999,999);
+	}
+	wait_ms(100);
 }
+
 
 void user_main(void){
 	int angle=0;UINT ball[5];
