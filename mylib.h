@@ -27,6 +27,7 @@
 
 #define RE_TIME 50
 
+
 #if 1 //kurage
 #else //neko
 #endif
