@@ -58,6 +58,11 @@ void kick(void) { //燃えないように3秒以上開ける
 	}
 }
 
+UINT getLine(int num) {
+	int sensor[3] = {LINE_L, LINE_R, LINE_B};
+	return gAD[sensor[num]];
+}
+
 float EleD = 0; 
 void dir() {
 	float Dev1, Dev2, ConP, EleD;
