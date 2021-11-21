@@ -29,6 +29,10 @@
 
 
 #if 1 //kurage
+	#define FRONT_LINE //前
+	#define RIGHT_LINE  //右
+	#define LEFT_LINE //左
+	#define BACK_LINE //後
 #else //neko
 #endif
 
