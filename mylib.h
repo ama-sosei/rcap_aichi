@@ -28,14 +28,6 @@
 #define RESET_TIME 50
 
 
-#if 1 //kurage
-	#define FRONT_LINE //前
-	#define RIGHT_LINE  //右
-	#define LEFT_LINE //左
-	#define BACK_LINE //後
-#else //neko
-#endif
-
 volatile long initial_angle=999;
 
 int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
