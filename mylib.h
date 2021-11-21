@@ -65,7 +65,7 @@ void dir() {
 	float Dev1, Dev2, ConP, EleD;
 	long speed;
 	startTimer(TIM_DIR_1);
-	Dev1 = get_bno(0); - initial_angle;
+	Dev1 = get_bno(0) - initial_angle;
 	if (Dev1 > 180) {
 		Dev1 = Dev1 - 360;
 	} else if (Dev1 < -179) {
