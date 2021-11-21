@@ -4,6 +4,15 @@
 #define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
 #define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
 
+#if 1 //kurage
+	#define FRONT_LINE //前
+	#define RIGHT_LINE  //右
+	#define LEFT_LINE //左
+	#define BACK_LINE //後
+	#define LIMIT_LINE
+#else //neko
+#endif
+
 void startup(void){
 	sleep(5);
 	setupTimer();
@@ -83,6 +92,18 @@ void processingGoal(int num, UINT* ball, int noback) {
 	wait_ms(100);
 }
 
+void user_sub_30(void){ //割り込み
+	int n1;
+	for (n1 = 0; n1 < 3; n1++) {
+		if (getLine(n1) > LINE_LIMIT) {
+			touchLine = (n1 + 1) * -1;
+			printf("%d\r\n", touchLine);
+			break;
+		}else{
+			touchLine=0;
+		}
+	}
+}
 
 void user_main(void){
 	int angle=0;UINT ball[5];
