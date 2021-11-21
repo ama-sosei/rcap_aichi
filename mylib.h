@@ -49,7 +49,9 @@ void motors(BYTE a, BYTE b, BYTE c, BYTE d) {
 	pwm_out();
 }
 
-void brake(void){motors(999, 999, 999, 999);}
+void brake(void){
+	motors(999, 999, 999, 999);
+}
 
 void kick(void) { //燃えないように3秒以上開ける
 	if (getTimer(TIM_KICKER) > 3000L) {
