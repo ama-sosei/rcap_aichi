@@ -67,7 +67,7 @@ void kick(void) { //燃えないように3秒以上開ける
 }
 
 UINT getLine(int num) {
-	int sensor[3] = {LEFT_LINE, RIGHT_LINE, BACK_LINE};
+	int sensor[3] = {FRONT_LINE, LEFT_LINE, RIGHT_LINE, BACK_LINE};
 	return gAD[sensor[num]];
 }
 
