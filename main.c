@@ -8,6 +8,7 @@
 	#define LIMIT_LINE
 #else //neko
 #endif
+bool isOnline = False;
 
 void startup(void){
 	sleep(5);
