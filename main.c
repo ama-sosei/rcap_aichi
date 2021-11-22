@@ -4,120 +4,109 @@
 #define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
 #define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
 
+#define run(n) (motors(n, n, n, n))
+
 #if 1 //kurage
-	#define LIMIT_LINE
+	#define LIMIT_LINE 45
 #else //neko
 #endif
-bool isOnline = FALSE;
+int isOnline = FALSE;
+int goal_num;
 
 void startup(void){
-	sleep(5);
+	UINT y[6], b[6];
+	sleep(10);
 	setupTimer();
 	initial_angle = get_bno(0);
+	getPixy(PIXY_GOAL_Y, y);getPixy(PIXY_GOAL_B, b);
+	if(b[4] > y[4]){
+		set_Led(0, LED_ON);
+		goal_num = PIXY_GOAL_B;
+	}else{
+		set_Led(1, LED_OFF);
+		goal_num = PIXY_GOAL_Y;
+	}
 }
 
-int chkPixy(UINT* ball) {
-	UINT x=ball[0], y=ball[1];
-	if (chkNum(140, 180, x) && chkNum(0, 70, y)) {
+int chkPixy(float angle) {
+	if (chkNum(-30, 0, angle)) {
 		return 1;
-	} else if (chkNum(0, 140, x) && chkNum(0, 70, y)) {
+	} else if (chkNum(-55, -30, angle)) {
 		return 2;
-	} else if (chkNum(0, 160, x) && chkNum(70, 110, y)) {
-		return 4;
-	} else if (chkNum(0, 140, x) && chkNum(110, 200, y)) {
-		return 6;
-	} else if (chkNum(180, 320, x) && chkNum(0, 70, y)) {
+	} else if (chkNum(0, 30, angle)) {
 		return 3;
-	} else if (chkNum(160, 320, x) && chkNum(70, 110, y)) {
+	} else if (chkNum(-105, -55, angle)) {
+		return 4;
+	} else if (chkNum(30, 120, angle)) {
 		return 5;
-	} else if (chkNum(180, 320, x) && chkNum(110, 200, y)) {
+	} else if (chkNum(-130 ,-105, angle)) {
+		return 6;
+	} else if (chkNum(120, 160, angle)) {
 		return 7;
-	} else if (chkNum(140, 180, x) && chkNum(110, 200, y)) {
+	} else if (chkNum(-130, -180, angle) || chkNum(160, 180, angle)) {
 		return 8;
 	} else {
 		return 0;
 	}
 }
 
-void processingGoal(int num, UINT* ball, int noback) {
-	UINT i, y[6], b[6], goal[5];
-	getPixy(PIXY_GOAL_Y, y);
-	getPixy(PIXY_GOAL_B, b);
-	if(y[5]){
-		for(i=0; i<5; i++)goal[i]=y[i];
-	}else{
-		for(i=0; i<5; i++)goal[i]=b[i];
-	}
-	last = y[5]>b[5] ? 'y' : 'b';
-	range = 20;
-	if (num == 1) {
-		if (goal[4]>300){
-			motors(30,30,30,30);
-		}else{
-			motors(40,40,40,40);
-		}
-	} else if (num == 2) {
-		if (noback) {
-			motors(35,35,35,35);
-		} else {
-			motors(35,-35,-35,35);
-		}
-	} else if (num == 3) {
-		if (noback) {
-			motors(35,35,35,35);
-		} else {
-			motors(-35,35,35,-35);
-		}
-	} else if (num == 4 || num == 5 || num == 6 || num == 7) {
-		motors(35,35,35,35);
-	} else if (num == 8) {
-		UINT y[5], b[5], l; getPixy(PIXY_GOAL_Y, y); getPixy(PIXY_GOAL_B, b);
-		if (y[4] != 0 && b[4] != 0) {
-			l = b[4] > y[4] ? b[0] : y[0];
-			if (l < 160) {
-				motors(40,-40,-40,40);
-			} else {
-				motors(-20,20,20,-20);
+void processingGoal(int num, float angle,UINT* ball) {
+	UINT i, y[6], b[6], *goal;
+	getPixy(PIXY_GOAL_Y, y);getPixy(PIXY_GOAL_B, b);
+	goal = goal_num==PIXY_GOAL_Y ? y : b;
+
+	if(num == 1){
+		run(50);
+	}else if(num == 2){
+
+	}else if(num == 3){
+
+	}else if(num == 4 || num == 5){
+		if (goal[4] > 1200){
+			if(num == 4){
+				motors(-40, 40, 40, -40);
+			}else{
+				motors(40, -40, -40, 40);
 			}
-			wait_ms(100);
+		}else{
+			run(-40);
 		}
-	} else if (num == 0) {
-		motors(999,999,999,999);
-	} else {
-		motors(999,999,999,999);
+	}else if(num == 6){
+
+	}else if(num == 7){
+
+	}else if(num == 8){
+
+	}else{
+		brake();
 	}
-	wait_ms(100);
 }
 
 void user_sub_30(void){ //割り込み
 	int n1;
 	for (n1 = 0; n1 < 3; n1++) {
-		if (getLine(n1) > LINE_LIMIT) {
-			touchLine = (n1 + 1) * -1;
-			printf("%d\r\n", touchLine);
-			break;
+		if (getLine(n1) > LIMIT_LINE) {
+			isOnline = TRUE;
 		}else{
-			touchLine=0;
+			isOnline = FALSE;
 		}
 	}
 }
 
-void user_main(void){
-	int angle=0;UINT ball[5];
+void user_main(void)
+{
+	UINT ball[5]; float angle = 0;
 	startup();
-	while(1){
-		getPixy(PIXY_BALL, ball);
-		angle=get_angle(ball);
-		printf("%4ld\n", (long)angle);
-		if (angle<=30) {
-			set_Led(3, LED_OFF);
-			motors(30,30,30,30);
-			sleep(0.1);
-			//processingGoal(chkPixy(ball), ball);
-		}else{
-			//dir();
-			set_Led(3, LED_ON);
+	while (TRUE) {
+		if (judge_bno(0, initial_angle, 20)) {
+			if (isOnline == 0) {
+				getPixy(PIXY_BALL, ball);
+				angle = get_angle(ball);
+				processingGoal(chkPixy(angle), angle, ball);
+			} else {
+			}
+		} else {
+			dir();
 		}
 	}
 }
-

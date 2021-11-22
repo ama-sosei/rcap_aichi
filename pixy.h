@@ -17,7 +17,7 @@
 
 int getPixy(int num, UINT *p) {
 	p[0] = get_pixydat_x(num); //x
-	p[1] = abs(/*200 - */get_pixydat_y(num)); //y
+	p[1] = get_pixydat_y(num); //y
 	p[2] = get_pixydat_w(num); //w
 	p[3] = get_pixydat_h(num); //h
 	p[4] = p[2] * p[3]; //s
@@ -25,14 +25,9 @@ int getPixy(int num, UINT *p) {
 }
 
 float get_angle(UINT *p){
-	float result, x=abs(ROBOT_X - p[0]), y=abs(ROBOT_Y - p[1]);
+	float result, x=(ROBOT_X - p[0]), y=(ROBOT_Y - p[1]);
 	result = deg(atan2(x, y));
-	if (result > 180){
-		result -= 360;
-	}else if (result <= -180){
-		result += 360;
-	}
-	return result+180;
+	return result;
 }
 
 

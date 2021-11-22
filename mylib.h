@@ -67,13 +67,13 @@ void kick(void) { //燃えないように3秒以上開ける
 }
 
 UINT getLine(int num) {
-	int sensor[3] = {FRONT_LINE, LEFT_LINE, RIGHT_LINE, BACK_LINE};
+	int sensor[] = {FRONT_LINE, LEFT_LINE, RIGHT_LINE, BACK_LINE};
 	return gAD[sensor[num]];
 }
 
-float EleD = 0; 
+float EleD = 0;
 void dir() {
-	float Dev1, Dev2, ConP, EleD;
+	float Dev1, Dev2, ConP, EleD, ConI;
 	long speed;
 	startTimer(TIM_DIR_1);
 	Dev1 = get_bno(0) - initial_angle;
