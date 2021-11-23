@@ -1,15 +1,17 @@
-#pragma once
+#ifndef __PIXY_H
+#define __PIXY_H
 
 #include "D_Main.h"
 #include "D_I2C.h"
 #include "D_SIO.h"
 #include "D_EIO.h"
 #include "math.h"
+#ifdef PI
+	#define PI 3.14159265358979323846
+#endif
 
-#define PI 3.14159265358979323846
 #define rad(n) (n * (PI/180))
 #define deg(n) (n * (180/PI))
-
 #define abs(n) (n < 0 ? -n: n)
 
 #define ROBOT_X 160.0
@@ -30,4 +32,4 @@ float get_angle(UINT *p){
 	return result;
 }
 
-
+#endif

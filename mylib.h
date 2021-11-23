@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MYLIB_H
+#define __MYLIB_H
+
 #define MCU_2620
 #define TJ3B
 #define USE_SUBIO
@@ -112,3 +114,5 @@ void dir() {
 	);
 }
 
+
+#endif

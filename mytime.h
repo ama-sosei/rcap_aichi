@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MYTIME_H
+#define __MYTIME_H
+
 #include "D_Main.h"
 
 #define TIM_NUM 10 //独自タイマー個数
@@ -28,4 +30,4 @@ void sleep(int num){
 
 
 
-
+#endif
