@@ -6,18 +6,19 @@
 #include "D_SIO.h"
 #include "D_EIO.h"
 #include "math.h"
-#ifdef PI
-	#define PI 3.14159265358979323846
+#ifndef PI //NASAが15桁らしいから15桁(適当)
+	#define PI 3.141592653589793
 #endif
 
 #define rad(n) (n * (PI/180))
 #define deg(n) (n * (180/PI))
 #define abs(n) (n < 0 ? -n: n)
 
+//計算時のロボットの座標(pixy中心)
 #define ROBOT_X 160.0
 #define ROBOT_Y 100.0
 
-int getPixy(int num, UINT *p) {
+int getPixy(int num, UINT *p) { //引数の配列に代入 構造体返すのもありかも
 	p[0] = get_pixydat_x(num); //x
 	p[1] = get_pixydat_y(num); //y
 	p[2] = get_pixydat_w(num); //w
@@ -27,9 +28,9 @@ int getPixy(int num, UINT *p) {
 }
 
 float get_angle(UINT *p){
-	float result, x=(ROBOT_X - p[0]), y=(ROBOT_Y - p[1]);
-	result = deg(atan2(x, y));
-	return result;
+	//真ん中(define値)調整すればちゃんと前を0にできるかも
+	float x=(ROBOT_X - p[0]), y=(ROBOT_Y - p[1]);
+	return deg(atan2(x, y));
 }
 
 #endif

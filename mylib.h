@@ -1,18 +1,5 @@
 #ifndef __MYLIB_H
 #define __MYLIB_H
-
-#define MCU_2620
-#define TJ3B
-#define USE_SUBIO
-#define CN9_OUT
-#define CN10_OUT
-#define INIT_CN9  LOW
-#define INIT_CN10 LOW
-#define USE_MCB
-#define USE_BNO
-#define USE_USS
-#define USE_PIXY
-
 #include "D_Main.h"
 #include "D_I2C.h"
 #include "D_SIO.h"
@@ -27,8 +14,10 @@
 #define TIM_DIR_3 8
 #define TIM_KICKER 9
 
+//pid timer reset time
 #define RESET_TIME 50
 
+//センサー番号
 #define FRONT_LINE CN1//前
 #define RIGHT_LINE  CN2//右
 #define LEFT_LINE CN3//左

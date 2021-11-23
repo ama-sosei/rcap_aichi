@@ -12,6 +12,7 @@
 #if 1 //kurage
 #else //neko
 #endif
+
 int isOnline = FALSE;
 int goal_num;
 
@@ -33,9 +34,7 @@ void startup(void){
 	set_Led(0,LED_OFF);set_Led(1, LED_OFF);
 }
 
-int chkPixy(float angle) {
-	//だいたいの位置把握
-	printf("angle %4ld\n", (long)angle);
+int chkPixy(float angle) {//だいたいの位置把握
 	if (chkNum(-30, -10, angle)) {
 		return 1;
 	} else if (chkNum(-60, -30, angle)) {
@@ -71,7 +70,6 @@ void processingGoal(int num, float angle,UINT* ball) {
 	UINT i, y[6], b[6], *goal;
 	getPixy(PIXY_GOAL_Y, y);getPixy(PIXY_GOAL_B, b);
 	goal = goal_num==PIXY_GOAL_Y ? y : b;
-	printf("%4ld\n", (long)num);
 	if(num == 1){
 		run(20);
 	}else if(num == 2 || num == 3){
@@ -89,7 +87,6 @@ void processingGoal(int num, float angle,UINT* ball) {
 	}else if(num == 6 || num == 7 || num == 8){
 		angle_control(angle*1.5, 15);
 	}else{
-		printf("%4ld, %4ld\n", (long)ball[0], (long)ball[1]);
 		brake();
 	}
 }
