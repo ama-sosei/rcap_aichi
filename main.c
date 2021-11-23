@@ -2,6 +2,8 @@
 //マクロ
 //#define abs(n) (n < 0 ? -n: n) //絶対値
 #define run(n) (motors(n, n, n, n)) //前後進
+#define right(n) (motors(n, -n, -n, n))
+#define left(n) (motors(-n, n, n, -n))
 
 #define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
 #define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
