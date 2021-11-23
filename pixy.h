@@ -1,20 +1,17 @@
 #ifndef __PIXY_H
 #define __PIXY_H
-
-#include "D_Main.h"
 #include "D_I2C.h"
-#include "D_SIO.h"
-#include "D_EIO.h"
 #include "math.h"
-#ifndef PI //NASAが15桁らしいから15桁(適当)
+
+#ifndef PI //NASAが15桁らしいから15桁((
 	#define PI 3.141592653589793
 #endif
 
-#define rad(n) (n * (PI/180))
-#define deg(n) (n * (180/PI))
-#define abs(n) (n < 0 ? -n: n)
+#define rad(n) (n * (PI/180)) //degree to radian
+#define deg(n) (n * (180/PI)) //radian to degree
 
-//計算時のロボットの座標(pixy中心)
+
+//計算時のロボットの座標(default:pixy中心)
 #define ROBOT_X 160.0
 #define ROBOT_Y 100.0
 
@@ -27,8 +24,10 @@ int getPixy(int num, UINT *p) { //引数の配列に代入 構造体返すのも
 	return 0;
 }
 
-float get_angle(UINT *p){
-	//真ん中(define値)調整すればちゃんと前を0にできるかも
+float get_angle(UINT *p){/*
+		引数はgetPixyで代入済みの配列, 返り値は角度
+		真ん中(define値)調整すればちゃんと前を0にできるかも
+	*/
 	float x=(ROBOT_X - p[0]), y=(ROBOT_Y - p[1]);
 	return deg(atan2(x, y));
 }

@@ -1,10 +1,11 @@
 #include "mylib.h"
+//マクロ
+//#define abs(n) (n < 0 ? -n: n) //絶対値
+#define run(n) (motors(n, n, n, n)) //前後進
 
 #define PIXY_BALL 1 //PIXY ボールのオブジェクトナンバー
 #define PIXY_GOAL_Y 2 //黄色ゴールのオブジェクトナンバー
 #define PIXY_GOAL_B 3 //青色ゴールのオブジェクトナンバー
-
-#define run(n) (motors(n, n, n, n))
 
 #define LIMIT_LINE 45
 #define LIMIT_SPEED 30
@@ -56,7 +57,7 @@ int chkPixy(float angle) {//だいたいの位置把握
 	}
 }
 
-void angle_control(float angle, int power){
+void angle_control(float angle, int power){ //目標値, スピード
 	motors(
 		sin(angle - rad(45)) * power,
 		sin(angle - rad(90+45)) * power,

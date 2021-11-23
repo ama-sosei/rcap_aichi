@@ -1,6 +1,5 @@
 #ifndef __MYTIME_H
 #define __MYTIME_H
-
 #include "D_Main.h"
 
 #define TIM_NUM 10 //独自タイマー個数
@@ -26,8 +25,6 @@ int setupTimer(void) {
 void sleep(int num){
 	wait_ms(num);
 }
-
-
 
 
 #endif
