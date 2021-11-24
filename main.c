@@ -94,6 +94,18 @@ void processingGoal(int num, float angle,UINT* ball) {
 	}
 }
 
+void comeback(int res_line){ //ライン処理
+	if (res_line == FRONT_LINE){
+		
+	}else if(res_line == RIGHT_LINE){
+		
+	}else if(res_line == LEFT_LINE){
+		
+	}else if(res_line == BACK_LINE){
+		
+	}
+}
+
 void user_sub_30(void){ //割り込み
 	int n1;
 	for (n1 = 0; n1 < 4; n1++) {
