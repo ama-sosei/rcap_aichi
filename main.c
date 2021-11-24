@@ -96,13 +96,13 @@ void processingGoal(int num, float angle,UINT* ball) {
 
 void comeback(int res_line){ //ライン処理
 	if (res_line == FRONT_LINE){
-		
+		run(-15);
 	}else if(res_line == RIGHT_LINE){
-		
+		left(15);
 	}else if(res_line == LEFT_LINE){
-		
+		right(15);
 	}else if(res_line == BACK_LINE){
-		
+		run(15);
 	}
 }
 
@@ -110,9 +110,9 @@ void user_sub_30(void){ //割り込み
 	int n1;
 	for (n1 = 0; n1 < 4; n1++) {
 		if (getLine(n1) > LIMIT_LINE) {
-			res_line = n1+1;
+			res_line = n1;
 		}else{
-			res_line = 0;
+			res_line = -1;
 		}
 	}
 }
@@ -122,7 +122,7 @@ void user_main(void){
 	startup();
 	while (TRUE) {
 		if (judge_bno(0, initial_angle, 20)) {
-			if (res_line == 0) {
+			if (res_line == -1) {
 				getPixy(PIXY_BALL, ball);
 				angle = get_angle(ball);
 				processingGoal(chkPixy(angle), angle, ball);
