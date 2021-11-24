@@ -16,7 +16,7 @@
 #else //neko
 #endif
 
-int isOnline = FALSE;
+int res_line = 0;
 int goal_num;
 
 void startup(void){
@@ -98,9 +98,9 @@ void user_sub_30(void){ //割り込み
 	int n1;
 	for (n1 = 0; n1 < 4; n1++) {
 		if (getLine(n1) > LIMIT_LINE) {
-			isOnline = TRUE;
+			res_line = n1+1;
 		}else{
-			isOnline = FALSE;
+			res_line = 0;
 		}
 	}
 }
@@ -110,11 +110,12 @@ void user_main(void){
 	startup();
 	while (TRUE) {
 		if (judge_bno(0, initial_angle, 20)) {
-			if (isOnline == 0) {
+			if (res_line == 0) {
 				getPixy(PIXY_BALL, ball);
 				angle = get_angle(ball);
 				processingGoal(chkPixy(angle), angle, ball);
 			} else {
+				comeback(res_line);
 			}
 		} else {
 			dir();
