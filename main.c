@@ -16,7 +16,7 @@
 #else //neko
 #endif
 
-int res_line = 0;
+int res_line = -1;
 int goal_num;
 
 void startup(void){
