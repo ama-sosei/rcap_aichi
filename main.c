@@ -96,7 +96,7 @@ void processingGoal(int num, float angle,UINT* ball) {
 
 void user_sub_30(void){ //割り込み
 	int n1;
-	for (n1 = 0; n1 < 3; n1++) {
+	for (n1 = 0; n1 < 4; n1++) {
 		if (getLine(n1) > LIMIT_LINE) {
 			isOnline = TRUE;
 		}else{
