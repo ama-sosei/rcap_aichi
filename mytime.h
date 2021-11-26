@@ -1,6 +1,7 @@
 #ifndef __MYTIME_H
 #define __MYTIME_H
 #include "D_Main.h"
+#define len(list, type) (sizeof(list) / sizeof(type))
 
 #define TIM_NUM 10 //独自タイマー個数
 
@@ -18,7 +19,7 @@ int startTimer(int num) {
 int setupTimer(void) {
 	int i;
 	clr_timer((BYTE)0);
-	for (i = 0; i < sizeof(timer) / sizeof(ULNG); ++i)timer[i] = get_timer((BYTE)0);
+	for (i = 0; i < len(timer, ULNG); ++i)timer[i] = get_timer((BYTE)0);
 	return 0;
 }
 

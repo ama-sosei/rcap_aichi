@@ -10,7 +10,6 @@
 #define rad(n) (n * (PI/180)) //degree to radian
 #define deg(n) (n * (180/PI)) //radian to degree
 
-
 //計算時のロボットの座標(default:pixy中心)
 #define ROBOT_X 160.0
 #define ROBOT_Y 100.0

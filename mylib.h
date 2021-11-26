@@ -8,6 +8,8 @@
 #include "mytime.h"
 #include "pixy.h"
 
+#define brake() motors(999, 999, 999, 999)
+
 //使用済みタイマー
 #define TIM_DIR_1 6
 #define TIM_DIR_2 7
@@ -42,10 +44,6 @@ void motors(BYTE a, BYTE b, BYTE c, BYTE d) {
 	gPwm[0]=a;gPwm[1]=b;gPwm[2]=c;gPwm[3]=d;
 	for (i = 0; i < 4; i++)if (gPwm[i] == (BYTE)999)gPwm[i] = 128;
 	pwm_out();
-}
-
-void brake(void){
-	motors(999, 999, 999, 999);
 }
 
 void kick(void) { //燃えないように3秒以上開ける
