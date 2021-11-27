@@ -7,20 +7,19 @@
 	#define PI 3.141592653589793
 #endif
 
-#define rad(n) (n * (PI/180)) //degree to radian
-#define deg(n) (n * (180/PI)) //radian to degree
+#define rad(n) ((n) * (PI/180.0)) //degree to radian
+#define deg(n) ((n) * (180.0/PI)) //radian to degree
 
 //計算時のロボットの座標(default:pixy中心)
 #define ROBOT_X 160.0
 #define ROBOT_Y 100.0
 
-int getPixy(int num, UINT *p) { //引数の配列に代入 構造体返すのもありかも
+void getPixy(int num, UINT *p) { //引数の配列に代入 構造体返すのもありかも
 	p[0] = get_pixydat_x(num); //x
 	p[1] = get_pixydat_y(num); //y
 	p[2] = get_pixydat_w(num); //w
 	p[3] = get_pixydat_h(num); //h
 	p[4] = p[2] * p[3]; //s
-	return 0;
 }
 
 float get_angle(UINT *p){/*

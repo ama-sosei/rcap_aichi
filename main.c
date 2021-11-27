@@ -12,8 +12,7 @@
 #define GREEN 0
 #define RED1 1
 
-#define LIMIT_LINE 45
-#define LIMIT_SPEED 30
+#define LIMIT_LINE 50
 
 #if 1 //kurage
 #else //neko
@@ -21,11 +20,29 @@
 
 int res_line = -1;
 int goal_num;
+int history[10]={0};
+
+void set_history(int num){
+	int i;
+	for (i = 0; i < 9; ++i){
+		history[i]=history[i+1]; //シフト
+	}
+	history[9]=num;
+}
+int get_history_avg(){
+	int i, max=0, count[10]={0};
+	for (i = 0; i < 10; ++i){
+		count[history[i]]++;
+	}
+	for(i = 0; i < 10; ++i)if(count[i]>count[max])max=i;
+	return i;
+}
+
 
 void startup(void) {
 	//初期化
 	UINT y[6], b[6];
-	sleep(10000);
+	sleep(8000);
 	setupTimer();
 	initial_angle = get_bno(0);
 	getPixy(PIXY_GOAL_Y, y);getPixy(PIXY_GOAL_B, b);
@@ -63,37 +80,47 @@ int chkPixy(float angle) {//だいたいの位置把握
 }
 
 void angle_control(float angle, int power) { //目標値, スピード
-	motors(
-		sin(angle - rad(45)) * power,
-		sin(angle - rad(90+45)) * power,
-		sin(angle - rad(180+45)) * power,
-		sin(angle - rad(270+45)) * power
-	);
+	int i,max=0;double speed[4];double _max=0;
+	if (angle<0)angle=360+angle;
+	speed[0] = sin(rad(angle - 315)) * -1 * power;//-0.7
+	speed[1] = sin(rad(angle - 45)) * -1 * power;//0.7
+	speed[2] = sin(rad(angle - 225)) * power;//-0.7
+	speed[3] = sin(rad(angle - 135)) * power;//-0.7
+	for (i = 0; i < 4; i++)if(abs((int)speed[i])>_max)_max=(int)speed[i];
+	//for (i = 0; i < 4; i++)speed[i]/=_max;
+	printf("out_speed %ld\n", (long)(int)speed[0]);
+	_motors(speed);
+	sleep(5000);
 }
 
-void processingGoal(int num, float angle,UINT* ball) {
+void processingGoal(int num, float angle,UINT* ball, int loop) {
 	// しゅーーーーーーーーーーーと
 	UINT i, y[6], b[6], *goal;
-	getPixy(PIXY_GOAL_Y, y);getPixy(PIXY_GOAL_B, b);
+	getPixy(PIXY_GOAL_Y, y);
+	getPixy(PIXY_GOAL_B, b);
 	goal = goal_num==PIXY_GOAL_Y ? y : b;
+	if (!loop)set_history(num);
 	if(num == 1) {
-		run(20);
-	}else if(num == 2 || num == 3) {
-		angle_control(angle*1.5, 15);
+		run(30);
+	}else if(num == 2) {
+		motors(30, 0, 0, 30);
+	}else if(num == 3) {
+		motors(0, 30, 30, 0);
 	}else if(num == 4 || num == 5) {
-		if (goal[4] > 1200) {
+		//if (goal[4] > 1200) {
 			if(num == 4) {
-				motors(-15, 15, 15, -15);
+				motors(-30, 30, 30, -30);
 			}else{
-				motors(15, -15, -15, 15);
+				motors(30, -30, -30, 30);
 			}
-		}else{
-			run(-15);
-		}
-	}else if(num == 6 || num == 7 || num == 8) {
-		angle_control(angle*1.5, 15);
+		//}else run(-30);
+	}else if(num == 6 || num == 7) {
+		run(-10);
+	}else if (num == 8){
+		motors(30, 0, 0, 30);
 	}else{
-		brake();
+		int his = get_history_avg();
+		if (his != 0)processingGoal(his, angle, ball, 1);
 	}
 }
 
@@ -125,16 +152,25 @@ void user_main(void) {
 	startup();
 	while (TRUE) {
 		if (judge_bno(0, initial_angle, 20)) {
-			//if (res_line == -1) {
+			if (res_line == -1) {
 				getPixy(PIXY_BALL, ball);
 				angle = get_angle(ball);
-				processingGoal(chkPixy(angle), angle, ball);
-			//} else {
-			//	comeback(res_line);
-			//}
+				processingGoal(chkPixy(angle), angle, ball, 0);
+			} else {
+				comeback(res_line);
+			}
 		} else {
 			dir();
 		}
 	}
 }
 
+/*
+void user_main(void) {
+	//while(TRUE){
+		angle_control(90, 50);
+	//	sleep(100);
+		//brake();
+	//}
+}
+*/

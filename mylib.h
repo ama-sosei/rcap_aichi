@@ -8,7 +8,8 @@
 #include "mytime.h"
 #include "pixy.h"
 
-#define brake() motors(999, 999, 999, 999)
+#define BRK 0x80
+#define brake() motors(BRK, BRK, BRK, BRK)
 
 //使用済みタイマー
 #define TIM_DIR_1 6
@@ -25,29 +26,60 @@
 #define LEFT_LINE CN3//左
 #define BACK_LINE CN4//後
 
+#define LIMIT_SPEED 100
+
+
 #if 1 //kurage
 #else //neko
 #endif
 
-volatile long initial_angle=999;
+volatile long initial_angle=0;
 
-int chkNum(UINT u, UINT o, UINT val) {//最低値 最大値 値
-	if (u < val && val < o){
+int chkNum(UINT min, UINT max, UINT val) {//最低値 最大値 値
+	if (min < val && val < max){
 		return TRUE;
 	} else {
 		return FALSE;
 	}
 }
 
-void motors(BYTE a, BYTE b, BYTE c, BYTE d) {
+int _motor(int n){
+	if (n == 999 || n== BRK){
+		return BRK;
+	}else if(100 < n){
+		return 100;
+	}else if(n < -100){
+		return -100;
+#if 0
+	}else if(n > LIMIT_SPEED){
+		return LIMIT_SPEED;
+	}else if(n < -LIMIT_SPEED){
+		return -LIMIT_SPEED;
+#endif
+	}else{
+		return n;
+	}
+}
+
+void _motors(int *p){
 	int i;
-	gPwm[0]=a;gPwm[1]=b;gPwm[2]=c;gPwm[3]=d;
-	for (i = 0; i < 4; i++)if (gPwm[i] == (BYTE)999)gPwm[i] = 128;
+	printf("motor: ");
+	for (i = 0; i < 4; i++){
+		//p[i]=_motor(p[i]);
+		printf("%ld, ", (long)p[i]);
+	};
+	printf("\n");
+	for (i = 0; i < 4; i++)gPwm[i]=(BYTE)p[i];
 	pwm_out();
 }
 
+void motors(int a, int b, int c, int d) {
+	int speed[]={a, b, c, d};
+	_motors(speed);
+}
+
 void kick(void) { //燃えないように3秒以上開ける
-	if (getTimer(TIM_KICKER) > 3000L) {
+	if (getTimer(TIM_KICKER) > (long)3000) {
 		motor(100, 100);
 		sleep(100);
 		motor(-100, -100);
@@ -61,7 +93,7 @@ UINT getLine(int num) {
 }
 
 float EleD = 0;
-void dir() {
+void dir(void) {
 	float Dev1, Dev2, ConP, EleD, ConI;
 	long speed;
 	startTimer(TIM_DIR_1);
@@ -93,12 +125,11 @@ void dir() {
 	} else if (speed > 30) {
 		speed = 30;
 	}
-	motors(
-		speed < 0 ? speed * -1 : speed | 0x80,
-		speed < 0 ? (speed * -1) | 0x80 : speed,
-		speed < 0 ? speed * -1 : speed | 0x80,
-		speed < 0 ? (speed * -1) | 0x80 : speed
-	);
+	gPwm[0] = speed < 0 ? speed * -1 : speed | 0x80;
+	gPwm[1] = speed < 0 ? (speed * -1) | 0x80 : speed;
+	gPwm[2] = speed < 0 ? speed * -1 : speed | 0x80;
+	gPwm[3] = speed < 0 ? (speed * -1) | 0x80 : speed;
+	pwm_out();
 }
 
 
