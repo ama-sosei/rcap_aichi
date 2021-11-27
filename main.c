@@ -12,10 +12,12 @@
 #define GREEN 0
 #define RED1 1
 
-#define LIMIT_LINE 50
+#define LIMIT_LINE 75
 
 #if 1 //kurage
+	#define kurage
 #else //neko
+	#define neko
 #endif
 
 int res_line = -1;
@@ -29,6 +31,7 @@ void set_history(int num){
 	}
 	history[9]=num;
 }
+
 int get_history_avg(){
 	int i, max=0, count[10]={0};
 	for (i = 0; i < 10; ++i){
@@ -87,8 +90,6 @@ void angle_control(float angle, int power) { //目標値, スピード
 	speed[2] = sin(rad(angle - 225)) * power;//-0.7
 	speed[3] = sin(rad(angle - 135)) * power;//-0.7
 	for (i = 0; i < 4; i++)if(abs((int)speed[i])>_max)_max=(int)speed[i];
-	//for (i = 0; i < 4; i++)speed[i]/=_max;
-	printf("out_speed %ld\n", (long)(int)speed[0]);
 	_motors(speed);
 	sleep(5000);
 }
@@ -101,39 +102,41 @@ void processingGoal(int num, float angle,UINT* ball, int loop) {
 	goal = goal_num==PIXY_GOAL_Y ? y : b;
 	if (!loop)set_history(num);
 	if(num == 1) {
-		run(30);
-	}else if(num == 2) {
-		motors(30, 0, 0, 30);
+		run(40);
 	}else if(num == 3) {
+		motors(30, 0, 0, 30);
+	}else if(num == 2) {
 		motors(0, 30, 30, 0);
 	}else if(num == 4 || num == 5) {
-		//if (goal[4] > 1200) {
+		if (goal[4] > 1200) {
 			if(num == 4) {
 				motors(-30, 30, 30, -30);
+				//motors(30, 0, 0, 30);
 			}else{
+				//motors(0, 30, 30, 0);
 				motors(30, -30, -30, 30);
 			}
-		//}else run(-30);
-	}else if(num == 6 || num == 7) {
-		run(-10);
-	}else if (num == 8){
-		motors(30, 0, 0, 30);
+		}//else run(-30);
+	}else if(num == 6 || num == 7 || num == 8) {
+		run(-30);
 	}else{
-		int his = get_history_avg();
-		if (his != 0)processingGoal(his, angle, ball, 1);
+		brake();
 	}
 }
 
 void comeback(int res_line) { //ライン処理
+	brake();
+	sleep(2000);
 	if (res_line == FRONT_LINE) {
-		run(-15);
+		run(-30);
 	}else if(res_line == RIGHT_LINE) {
-		left(15);
+		left(30);
 	}else if(res_line == LEFT_LINE) {
-		right(15);
+		right(30);
 	}else if(res_line == BACK_LINE) {
-		run(15);
+		run(30);
 	}
+	sleep(1000);
 }
 
 void user_sub_30(void) { //割り込み
@@ -165,12 +168,3 @@ void user_main(void) {
 	}
 }
 
-/*
-void user_main(void) {
-	//while(TRUE){
-		angle_control(90, 50);
-	//	sleep(100);
-		//brake();
-	//}
-}
-*/

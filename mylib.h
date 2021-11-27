@@ -61,14 +61,11 @@ int _motor(int n){
 	}
 }
 
-void _motors(int *p){
+void _motors(double *p){
 	int i;
-	printf("motor: ");
 	for (i = 0; i < 4; i++){
 		//p[i]=_motor(p[i]);
-		printf("%ld, ", (long)p[i]);
 	};
-	printf("\n");
 	for (i = 0; i < 4; i++)gPwm[i]=(BYTE)p[i];
 	pwm_out();
 }
@@ -88,7 +85,7 @@ void kick(void) { //燃えないように3秒以上開ける
 }
 
 UINT getLine(int num) {
-	int sensor[] = {FRONT_LINE, LEFT_LINE, RIGHT_LINE, BACK_LINE};
+	int sensor[] = {FRONT_LINE, RIGHT_LINE, BACK_LINE};
 	return gAD[sensor[num]];
 }
 
