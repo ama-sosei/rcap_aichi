@@ -84,7 +84,7 @@ int chkPixy(float angle) {//だいたいの位置把握
 
 void angle_control(float angle, int power) { //目標値, スピード
 	int i,max=0;double speed[4];double _max=0;
-	if (angle<0)angle=360+angle;
+	if (angle<0)angle+=360;
 	speed[0] = sin(rad(angle - 315)) * -1 * power;//-0.7
 	speed[1] = sin(rad(angle - 45)) * -1 * power;//0.7
 	speed[2] = sin(rad(angle - 225)) * power;//-0.7
