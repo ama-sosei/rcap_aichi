@@ -97,13 +97,13 @@ void dir(void) {
 	Dev1 = get_bno(0) - initial_angle;
 	if (Dev1 > 180) {
 		Dev1 = Dev1 - 360;
-	} else if (Dev1 < -179) {
+	} else if (Dev1 < -180) {
 		Dev1 = Dev1 + 360;
 	}
 	Dev2 = get_bno(0) - initial_angle;
 	if (Dev2 > 180) {
 		Dev2 -= 360;
-	} else if (Dev2 < -179) {
+	} else if (Dev2 < -180) {
 		Dev2 += 360;
 	}
 	startTimer(TIM_DIR_2);
