@@ -46,16 +46,16 @@ int chkNum(UINT min, UINT max, UINT val) {//最低値 最大値 値
 int _motor(int n){
 	if (n == 999 || n== BRK){
 		return BRK;
-	}else if(100 < n){
-		return 100;
-	}else if(n < -100){
-		return -100;
 #if 0
 	}else if(n > LIMIT_SPEED){
 		return LIMIT_SPEED;
 	}else if(n < -LIMIT_SPEED){
 		return -LIMIT_SPEED;
 #endif
+	}else if(100 < n){
+		return 100;
+	}else if(n < -100){
+		return -100;
 	}else{
 		return n;
 	}
